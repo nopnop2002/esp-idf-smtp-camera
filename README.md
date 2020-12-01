@@ -88,7 +88,7 @@ You can choose one of the following shutter methods
 - Shutter is the Enter key on the keyboard   
 For operation check
 
-![config-shutter-1](https://user-images.githubusercontent.com/6020549/98636952-1e320700-236b-11eb-8c5b-0a2b56267310.jpg)
+![config-shutter-1](https://user-images.githubusercontent.com/6020549/100706728-d132d500-33ec-11eb-96e2-22d30b2131f5.jpg)
 
 - Shutter is a GPIO toggle
 
@@ -108,7 +108,7 @@ I confirmed that the following GPIO can be used.
 |GPIO15|OK|OK|
 |GPIO16|NG|NG|
 
-![config-shutter-2](https://user-images.githubusercontent.com/6020549/98636945-1c684380-236b-11eb-8682-32e8430d7216.jpg)
+![config-shutter-2](https://user-images.githubusercontent.com/6020549/100706729-d2640200-33ec-11eb-8ac5-68abad4d1a0b.jpg)
 
 - Shutter is TCP Socket   
 You can connect with mDNS hostname.   
@@ -117,7 +117,7 @@ You can use tcp_send.py.
 python ./tcp_send.py
 ```
 
-![config-shutter-3](https://user-images.githubusercontent.com/6020549/98636948-1d997080-236b-11eb-8579-b312da1ac915.jpg)
+![config-shutter-3](https://user-images.githubusercontent.com/6020549/100706730-d2fc9880-33ec-11eb-80da-80cc8278ae43.jpg)
 
 - Shutter is UDP Socket   
 You can use udp_send.py.   
@@ -125,7 +125,7 @@ You can use udp_send.py.
 python ./udp_send.py
 ```
 
-![config-shutter-4](https://user-images.githubusercontent.com/6020549/98636950-1d997080-236b-11eb-98ca-c14d16954f42.jpg)
+![config-shutter-4](https://user-images.githubusercontent.com/6020549/100706733-d2fc9880-33ec-11eb-85d2-62b988720d75.jpg)
 
 ## Flash Light
 
