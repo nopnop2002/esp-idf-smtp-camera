@@ -112,17 +112,13 @@ I confirmed that the following GPIO can be used.
 - Shutter is TCP Socket   
 You can connect with mDNS hostname.   
 You can use tcp_send.py.   
-```
-python ./tcp_send.py
-```
+`python ./tcp_send.py`
 
 ![config-shutter-3](https://user-images.githubusercontent.com/6020549/100706730-d2fc9880-33ec-11eb-80da-80cc8278ae43.jpg)
 
 - Shutter is UDP Socket   
 You can use udp_send.py.   
-```
-python ./udp_send.py
-```
+`python ./udp_send.py`
 
 ![config-shutter-4](https://user-images.githubusercontent.com/6020549/100706733-d2fc9880-33ec-11eb-85d2-62b988720d75.jpg)
 
