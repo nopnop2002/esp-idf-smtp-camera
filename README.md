@@ -1,22 +1,13 @@
 # esp-idf-smtp-camera
 Take a picture and Publish it via SMTP.   
+This project use [ESP32 Camera Driver](https://github.com/espressif/esp32-camera).   
 
-![スライド1](https://user-images.githubusercontent.com/6020549/99764383-47f3e680-2b40-11eb-89ea-152d1b9c6aac.JPG)
-
-![スライド2](https://user-images.githubusercontent.com/6020549/99764391-49bdaa00-2b40-11eb-9ebf-8b5b9b815127.JPG)
+![SLIDE1](https://user-images.githubusercontent.com/6020549/119618851-52b86c80-be3e-11eb-9bb1-ae765d511958.JPG)
+![SLIDE2](https://user-images.githubusercontent.com/6020549/119618847-521fd600-be3e-11eb-88f4-3e1f18c7e82e.JPG)
 
 # Software requirements
-esp-idf v4.0.2-120.   
-git clone -b release/v4.0 --recursive https://github.com/espressif/esp-idf.git
-
-esp-idf v4.1-520.   
-git clone -b release/v4.1 --recursive https://github.com/espressif/esp-idf.git
-
-esp-idf v4.2-beta1-227.   
-git clone -b release/v4.2 --recursive https://github.com/espressif/esp-idf.git
-
-__It does not work with esp-idf v4.3.__   
-__Even if I fix [this](https://github.com/espressif/esp-idf/pull/6029), I still get a panic.__
+esp-idf v4.4 or later.   
+The mDNS strict mode [issue](https://github.com/espressif/esp-idf/issues/6190) has been resolved.   
 
 # Installation
 Use a USB-TTL converter.   
@@ -33,9 +24,12 @@ Use a USB-TTL converter.
 ```
 git clone https://github.com/nopnop2002/esp-idf-smtp-camera
 cd esp-idf-smtp-camera
-git clone https://github.com/espressif/esp32-camera components
-make menuconfig
-make flash monitor
+git clone https://github.com/espressif/esp32-camera components/esp32-camera
+chmod 777 getpem.sh
+./getpem.sh
+idf.py set-target esp32
+idf.py menuconfig
+idf.py flash monitor
 ```
 
 # Start firmware
@@ -44,17 +38,19 @@ Change GPIO0 to open and press the RESET button.
 # Configuration
 Set the following items using menuconfig.
 
-![config-main](https://user-images.githubusercontent.com/6020549/66692052-c17e9b80-ecd5-11e9-8316-075350ceb2e9.jpg)
-
-![config-app](https://user-images.githubusercontent.com/6020549/100705148-0f7ac500-33ea-11eb-8497-6bede2901a72.jpg)
+![config-main](https://user-images.githubusercontent.com/6020549/121621472-30ae2380-caa7-11eb-8428-1dd5273bd668.jpg)
+![config-app](https://user-images.githubusercontent.com/6020549/121621482-33107d80-caa7-11eb-8c29-ecb9ad6f3912.jpg)
 
 ## Wifi Setting
 
-![config-wifi-1](https://user-images.githubusercontent.com/6020549/100705156-11448880-33ea-11eb-9de9-89f05744a6d4.jpg)
+![config-wifi-1](https://user-images.githubusercontent.com/6020549/121621478-31df5080-caa7-11eb-9ec4-90fc8375cbdb.jpg)
+
+You can use the mDNS hostname instead of the IP address.   
+![config-wifi-2](https://user-images.githubusercontent.com/6020549/121621479-3277e700-caa7-11eb-9afe-27f1a5091c4d.jpg)
 
 You can use static IP.   
+![config-wifi-3](https://user-images.githubusercontent.com/6020549/121621480-3277e700-caa7-11eb-9280-bd66214bf6a7.jpg)
 
-![config-wifi-2](https://user-images.githubusercontent.com/6020549/100705166-16a1d300-33ea-11eb-986d-4ff228e72d97.jpg)
 
 ## SMTP Server Setting
 
@@ -64,22 +60,25 @@ __I only tested gmail accounts.__
 
 ## Attached File Name Setting
 
-Select the attached file name from the following.   
+You can select the file name to write to the shared folder from the following.   
 - Always the same file name   
 - File name based on date and time   
 When you choose date and time file name, you will need an NTP server.   
 The file name will be YYYYMMDD-hhmmss.jpg.   
 
-![config-filename-1](https://user-images.githubusercontent.com/6020549/98748023-1d958100-23fc-11eb-8bc9-9b65306be2a3.jpg)
-![config-filename-2](https://user-images.githubusercontent.com/6020549/98748025-1ec6ae00-23fc-11eb-9770-e00618b4097c.jpg)
+![config-filename-1](https://user-images.githubusercontent.com/6020549/119243498-5203aa00-bba2-11eb-87d5-053636dbb85a.jpg)
+![config-filename-2](https://user-images.githubusercontent.com/6020549/119243499-5203aa00-bba2-11eb-8c0f-6bb42d125d64.jpg)
 
-## Camera Pin
+- Add FrameSize to Remote file Name   
+When this is enabled, FrameSize is added to remote file name like this.   
+`20210520-165740_800x600.jpg`   
 
-![config-camerapin](https://user-images.githubusercontent.com/6020549/66692087-1d492480-ecd6-11e9-8b69-68191005a453.jpg)
+![config-filename-3](https://user-images.githubusercontent.com/6020549/119243501-529c4080-bba2-11eb-8ba4-85cdd764b0fc.jpg)
 
-## Picture Size
-
-![config-picturesize](https://user-images.githubusercontent.com/6020549/66692095-26d28c80-ecd6-11e9-933e-ab0be911ecd2.jpg)
+## Select Frame Size
+Large frame sizes take longer to take a picture.   
+![config-framesize-1](https://user-images.githubusercontent.com/6020549/118947689-8bfe6180-b992-11eb-8657-b4e86d3acc70.jpg)
+![config-framesize-2](https://user-images.githubusercontent.com/6020549/118947692-8d2f8e80-b992-11eb-9caa-1f6b6cb2210e.jpg)
 
 ## Select Shutter
 

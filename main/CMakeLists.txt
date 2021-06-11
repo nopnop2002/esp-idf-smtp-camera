@@ -1,6 +1,11 @@
-# Embed the server root certificate into the final binary
-#
-# (If this was a component, we would set COMPONENT_EMBED_TXTFILES here.)
-idf_component_register(SRCS "main.c" "camera.c" "gpio.c" "smtp.c" "tcp_server.c" "udp_server.c" "keyboard.c"
-                    INCLUDE_DIRS "."
-                    EMBED_TXTFILES server_root_cert.pem)
+set(srcs "main.c"
+	"keyboard.c"
+	"gpio.c"
+	"smtp_client.c"
+	"tcp_server.c"
+	"udp_server.c")
+
+idf_component_register(SRCS ${srcs}
+    INCLUDE_DIRS "."
+    EMBED_TXTFILES gmail_root_cert.pem)
+

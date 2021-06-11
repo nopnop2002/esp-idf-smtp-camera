@@ -67,7 +67,7 @@ static const char *TAG = "SMTP";
 
 
 /**
- * Root cert for smtp.googlemail.com, taken from server_root_cert.pem
+ * Root cert for smtp.googlemail.com, taken from gmail_root_cert.pem
  *
  * The PEM file was extracted from the output of this command:
  * openssl s_client -showcerts -connect smtp.googlemail.com:587 -starttls smtp
@@ -78,8 +78,8 @@ static const char *TAG = "SMTP";
  * in the component.mk COMPONENT_EMBED_TXTFILES variable.
  */
 
-extern const uint8_t server_root_cert_pem_start[] asm("_binary_server_root_cert_pem_start");
-extern const uint8_t server_root_cert_pem_end[]   asm("_binary_server_root_cert_pem_end");
+extern const uint8_t server_root_cert_pem_start[] asm("_binary_gmail_root_cert_pem_start");
+extern const uint8_t server_root_cert_pem_end[]   asm("_binary_gmail_root_cert_pem_end");
 
 static int write_and_get_response(mbedtls_net_context *sock_fd, unsigned char *buf, size_t len)
 {
