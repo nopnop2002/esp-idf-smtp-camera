@@ -77,8 +77,9 @@ When this is enabled, FrameSize is added to remote file name like this.
 
 ## Select Frame Size
 Large frame sizes take longer to take a picture.   
-![config-framesize-1](https://user-images.githubusercontent.com/6020549/118947689-8bfe6180-b992-11eb-8657-b4e86d3acc70.jpg)
-![config-framesize-2](https://user-images.githubusercontent.com/6020549/118947692-8d2f8e80-b992-11eb-9caa-1f6b6cb2210e.jpg)
+
+![config-framesize-1](https://user-images.githubusercontent.com/6020549/122479721-7ff3d700-d006-11eb-9910-8fd132f7479b.jpg)
+![config-framesize-2](https://user-images.githubusercontent.com/6020549/122479725-81bd9a80-d006-11eb-847b-0748bfba75df.jpg)
 
 ## Select Shutter
 
@@ -123,7 +124,7 @@ You can use udp_send.py.
 
 ## Flash Light
 
-ESP32-CAM by AI-Thinker have flash light on GPIO4.
+ESP32-CAM by AI-Thinker have flash light on GPIO4.   
 
-![config-flash](https://user-images.githubusercontent.com/6020549/98637034-46216a80-236b-11eb-8504-e83f718f5e85.jpg)
+![config-flash](https://user-images.githubusercontent.com/6020549/122479750-8f732000-d006-11eb-9e50-16c91cff1bb3.jpg)
 
