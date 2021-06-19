@@ -2,8 +2,8 @@
 Take a picture and Publish it via SMTP.   
 This project use [ESP32 Camera Driver](https://github.com/espressif/esp32-camera).   
 
-![SLIDE1](https://user-images.githubusercontent.com/6020549/119618851-52b86c80-be3e-11eb-9bb1-ae765d511958.JPG)
-![SLIDE2](https://user-images.githubusercontent.com/6020549/119618847-521fd600-be3e-11eb-88f4-3e1f18c7e82e.JPG)
+![slide0001](https://user-images.githubusercontent.com/6020549/122657146-caf32300-d19b-11eb-95c0-d053b77599c7.jpg)
+![slide0002](https://user-images.githubusercontent.com/6020549/122657145-c9c1f600-d19b-11eb-9049-17dc2d71acdc.jpg)
 
 # Software requirements
 esp-idf v4.4 or later.   
