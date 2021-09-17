@@ -6,8 +6,7 @@ This project use [ESP32 Camera Driver](https://github.com/espressif/esp32-camera
 ![slide0002](https://user-images.githubusercontent.com/6020549/122657145-c9c1f600-d19b-11eb-9049-17dc2d71acdc.jpg)
 
 # Software requirements
-esp-idf v4.4 or later.   
-The mDNS strict mode [issue](https://github.com/espressif/esp-idf/issues/6190) has been resolved.   
+esp-idf v4.3 or later.   
 
 # Installation
 Use a USB-TTL converter.   
@@ -46,6 +45,11 @@ Set the following items using menuconfig.
 ![config-wifi-1](https://user-images.githubusercontent.com/6020549/121621478-31df5080-caa7-11eb-9ec4-90fc8375cbdb.jpg)
 
 You can use the mDNS hostname instead of the IP address.   
+- esp-idf V4.3 or earlier   
+ You will need to manually change the mDNS strict mode according to [this](https://github.com/espressif/esp-idf/issues/6190) instruction.   
+- esp-idf V4.4 or later  
+ If you set CONFIG_MDNS_STRICT_MODE = y in sdkconfig.default, the firmware will be built with MDNS_STRICT_MODE = 1.
+
 ![config-wifi-2](https://user-images.githubusercontent.com/6020549/121621479-3277e700-caa7-11eb-9afe-27f1a5091c4d.jpg)
 
 You can use static IP.   
