@@ -61,8 +61,8 @@ You can use static IP.
 ![config-smtp](https://user-images.githubusercontent.com/6020549/98746220-64817780-23f8-11eb-99c1-f5a4dde2e1e8.jpg)
 
 __I only tested gmail accounts.__   
-If you want to use something other than gmail, you need to change gmail_root_cert.pem according to [this](https://github.com/espressif/esp-idf/issues/7250) instruction.   
-
+If you want to use a non-Gmail account, you need to change gmail_root_cert.pem according to [this](https://github.com/espressif/esp-idf/issues/7250) instruction.   
+,
 
 ## Attached File Name Setting
 
