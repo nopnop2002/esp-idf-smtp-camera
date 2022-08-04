@@ -36,7 +36,7 @@
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/error.h"
-#include "mbedtls/certs.h"
+//#include "mbedtls/certs.h"
 #include <mbedtls/base64.h>
 #include <sys/param.h>
 
@@ -516,12 +516,13 @@ void smtp_client_task(void *pvParameters)
 				   "Content-Type: image/png;name=esp_logo.png\n"
 				   "Content-Transfer-Encoding: base64\n"
 				   "Content-Disposition:attachment;filename=\"esp_logo.png\"\n\n");
-#endif
+#else
 		len = snprintf((char *) buf, BUF_SIZE,
 				   "Content-Type: image/jpeg;name=%s\n"
 				   "Content-Transfer-Encoding: base64\n"
 				   "Content-Disposition:attachment;filename=\"%s\"\n\n", 
 					smtpBuf.remoteFileName,	smtpBuf.remoteFileName);
+#endif
 		ret = write_ssl_data(&client->ssl, (unsigned char *) buf, len);
 
 
