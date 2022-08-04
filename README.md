@@ -65,7 +65,7 @@ If you want to use a non-gmail account, you need to change gmail_root_cert.pem a
 
 Note about Gmail:   
 To help keep your account secure, from May 30, 2022, Google no longer supports the use of third-party apps or devices which ask you to sign in to your Google Account using only your username and password.   
-__You need to generate special app password according [this](https://stackoverflow.com/questions/72577189/gmail-smtp-server-stopped-working-as-it-no-longer-support-less-secure-apps/72626684#72626684).__   
+__You will need to generate a special app password as described [here](https://stackoverflow.com/questions/72577189/gmail-smtp-server-stopped-working-as-it-no-longer-support-less-secure-apps/72626684#72626684).__   
 
 
 ## Attached File Name Setting
