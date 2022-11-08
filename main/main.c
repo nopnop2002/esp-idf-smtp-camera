@@ -1,9 +1,12 @@
 /*
    Take a picture and Publish it via SMTP Send.
+
    This code is in the Public Domain (or CC0 licensed, at your option.)
+
    Unless required by applicable law or agreed to in writing, this
    software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
    CONDITIONS OF ANY KIND, either express or implied.
+
    I ported from here:
    https://github.com/espressif/esp32-camera/blob/master/examples/take_picture.c
 */
@@ -12,6 +15,7 @@
 #include <stdlib.h>
 #include <sys/unistd.h>
 #include <sys/stat.h>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
@@ -30,6 +34,7 @@
 #include "driver/gpio.h"
 
 #include "esp_camera.h"
+#include "camera_pin.h"
 
 #include "cmd.h"
 
@@ -50,54 +55,6 @@ static int s_retry_num = 0;
 QueueHandle_t xQueueCmd;
 QueueHandle_t xQueueSmtp;
 SemaphoreHandle_t xSemaphoreSmtp;
-
-#define BOARD_ESP32CAM_AITHINKER
-
-// WROVER-KIT PIN Map
-#ifdef BOARD_WROVER_KIT
-
-#define CAM_PIN_PWDN -1  //power down is not used
-#define CAM_PIN_RESET -1 //software reset will be performed
-#define CAM_PIN_XCLK 21
-#define CAM_PIN_SIOD 26
-#define CAM_PIN_SIOC 27
-
-#define CAM_PIN_D7 35
-#define CAM_PIN_D6 34
-#define CAM_PIN_D5 39
-#define CAM_PIN_D4 36
-#define CAM_PIN_D3 19
-#define CAM_PIN_D2 18
-#define CAM_PIN_D1 5
-#define CAM_PIN_D0 4
-#define CAM_PIN_VSYNC 25
-#define CAM_PIN_HREF 23
-#define CAM_PIN_PCLK 22
-
-#endif
-
-// ESP32Cam (AiThinker) PIN Map
-#ifdef BOARD_ESP32CAM_AITHINKER
-
-#define CAM_PIN_PWDN 32
-#define CAM_PIN_RESET -1 //software reset will be performed
-#define CAM_PIN_XCLK 0
-#define CAM_PIN_SIOD 26
-#define CAM_PIN_SIOC 27
-
-#define CAM_PIN_D7 35
-#define CAM_PIN_D6 34
-#define CAM_PIN_D5 39
-#define CAM_PIN_D4 36
-#define CAM_PIN_D3 21
-#define CAM_PIN_D2 19
-#define CAM_PIN_D1 18
-#define CAM_PIN_D0 5
-#define CAM_PIN_VSYNC 25
-#define CAM_PIN_HREF 23
-#define CAM_PIN_PCLK 22
-
-#endif
 
 //static camera_config_t camera_config = {
 camera_config_t camera_config = {
@@ -260,19 +217,17 @@ void wifi_init_sta()
 	/* Waiting until either the connection is established (WIFI_CONNECTED_BIT) or connection failed for the maximum
 	 * number of re-tries (WIFI_FAIL_BIT). The bits are set by event_handler() (see above) */
 	EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
-			WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
-			pdFALSE,
-			pdFALSE,
-			portMAX_DELAY);
+		WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
+		pdFALSE,
+		pdFALSE,
+		portMAX_DELAY);
 
 	/* xEventGroupWaitBits() returns the bits before the call returned, hence we can test which event actually
 	 * happened. */
 	if (bits & WIFI_CONNECTED_BIT) {
-		ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
-				 CONFIG_ESP_WIFI_SSID, CONFIG_ESP_WIFI_PASSWORD);
+		ESP_LOGI(TAG, "connected to ap SSID:%s password:%s", CONFIG_ESP_WIFI_SSID, CONFIG_ESP_WIFI_PASSWORD);
 	} else if (bits & WIFI_FAIL_BIT) {
-		ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
-				 CONFIG_ESP_WIFI_SSID, CONFIG_ESP_WIFI_PASSWORD);
+		ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s", CONFIG_ESP_WIFI_SSID, CONFIG_ESP_WIFI_PASSWORD);
 	} else {
 		ESP_LOGE(TAG, "UNEXPECTED EVENT");
 	}
@@ -504,11 +459,19 @@ void app_main(void)
 	smtpBuf.taskHandle = xTaskGetCurrentTaskHandle();
 	sprintf(smtpBuf.localFileName, "/spiffs/picture.jpg");
 	ESP_LOGI(TAG, "localFileName=%s",smtpBuf.localFileName);
+
 #if CONFIG_REMOTE_IS_FIXED_NAME
-	//sprintf(requestBuf.remoteFileName, "picture.jpg");
 #if CONFIG_REMOTE_FRAMESIZE
-	sprintf(smtpBuf.remoteFileName, "%s_%s", CONFIG_FIXED_REMOTE_FILE, FRAMESIZE_STRING);
+    char baseFileName[64];
+    strcpy(baseFileName, CONFIG_FIXED_REMOTE_FILE);
+    for (int index=0;index<strlen(baseFileName);index++) {
+        if (baseFileName[index] == 0x2E) baseFileName[index] = 0;
+    }
+    ESP_LOGI(TAG, "baseFileName=[%s]", baseFileName);
+    // picture_640x480.jpg
+    sprintf(smtpBuf.remoteFileName, "%s_%s.jpg", baseFileName, FRAMESIZE_STRING);
 #else
+    // picture.jpg
 	sprintf(smtpBuf.remoteFileName, "%s", CONFIG_FIXED_REMOTE_FILE);
 #endif
 	ESP_LOGI(TAG, "remoteFileName=%s",smtpBuf.remoteFileName);
@@ -536,10 +499,12 @@ void app_main(void)
 		strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
 		ESP_LOGI(TAG, "The current date/time is: %s", strftime_buf);
 #if CONFIG_REMOTE_FRAMESIZE
+		// 20220927-110940_640x480.jpg
 		sprintf(smtpBuf.remoteFileName, "%04d%02d%02d-%02d%02d%02d_%s.jpg",
 		(timeinfo.tm_year+1900),(timeinfo.tm_mon+1),timeinfo.tm_mday,
 		timeinfo.tm_hour,timeinfo.tm_min,timeinfo.tm_sec, FRAMESIZE_STRING);
 #else
+		// 20220927-110742.jpg
 		sprintf(smtpBuf.remoteFileName, "%04d%02d%02d-%02d%02d%02d.jpg",
 		(timeinfo.tm_year+1900),(timeinfo.tm_mon+1),timeinfo.tm_mday,
 		timeinfo.tm_hour,timeinfo.tm_min,timeinfo.tm_sec);

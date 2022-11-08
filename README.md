@@ -5,11 +5,17 @@ This project use [ESP32 Camera Driver](https://github.com/espressif/esp32-camera
 ![slide0001](https://user-images.githubusercontent.com/6020549/122657146-caf32300-d19b-11eb-95c0-d053b77599c7.jpg)
 ![slide0002](https://user-images.githubusercontent.com/6020549/122657145-c9c1f600-d19b-11eb-9049-17dc2d71acdc.jpg)
 
+# Hardware requirements
+ESP32 development board with OV2640 camera.   
+If you use other camera, edit sdkconfig.default.   
+![ESP32-Camera-board](https://user-images.githubusercontent.com/6020549/198520670-27ea9bd1-71d8-438f-be58-8516154be4af.JPG)
+
+
 # Software requirements
-esp-idf v4.3 or later.   
+esp-idf v4.4 or later.   
 
 # Installation
-Use a USB-TTL converter.   
+For AiThinker ESP32-CAM, You have to use a USB-TTL converter.   
 
 |ESP-32|USB-TTL|
 |:-:|:-:|
@@ -32,13 +38,13 @@ idf.py flash monitor
 ```
 
 # Start firmware
-Change GPIO0 to open and press the RESET button.
+For AiThinker ESP32-CAM, Change GPIO0 to open and press the RESET button.
 
 # Configuration
 Set the following items using menuconfig.
 
 ![config-main](https://user-images.githubusercontent.com/6020549/121621472-30ae2380-caa7-11eb-8428-1dd5273bd668.jpg)
-![config-app](https://user-images.githubusercontent.com/6020549/121621482-33107d80-caa7-11eb-8c29-ecb9ad6f3912.jpg)
+![config-app](https://user-images.githubusercontent.com/6020549/200573965-a92fad77-7bb7-4519-b123-dd7fad9c7312.jpg)
 
 ## Wifi Setting
 
@@ -75,7 +81,7 @@ You can connect using the mDNS hostname instead of the IP address.
 __I've only tested with a Gmail account.__   
 If you want to use a non-gmail account, you need to change gmail_root_cert.pem according to [this](https://github.com/espressif/esp-idf/issues/7250) instruction.   
 
-Note about Gmail:   
+__Note about Gmail:__   
 To help keep your account secure, from May 30, 2022, Google no longer supports the use of third-party apps or devices which ask you to sign in to your Google Account using only your username and password.   
 Due to this change, you can no longer log in to Google from ESP-IDF using only your username and password.   
 __You will need to generate a special app password as described [here](https://stackoverflow.com/questions/72577189/gmail-smtp-server-stopped-working-as-it-no-longer-support-less-secure-apps/72626684#72626684).__   
@@ -97,6 +103,11 @@ When this is enabled, FrameSize is added to remote file name like this.
 `20210520-165740_800x600.jpg`   
 
 ![config-filename-3](https://user-images.githubusercontent.com/6020549/119243501-529c4080-bba2-11eb-8ba4-85cdd764b0fc.jpg)
+
+
+## Select Board
+![config-board](https://user-images.githubusercontent.com/6020549/200573971-d38ac9a2-9d3f-4e14-ba45-a187cecb5729.jpg)
+
 
 ## Select Frame Size
 Large frame sizes take longer to take a picture.   

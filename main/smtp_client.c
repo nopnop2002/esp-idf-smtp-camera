@@ -29,6 +29,8 @@
 #include "esp_system.h"
 #include "esp_log.h"
 
+//#include <sys/param.h>
+
 #include "mbedtls/platform.h"
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/esp_debug.h"
@@ -37,8 +39,8 @@
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/error.h"
 //#include "mbedtls/certs.h"
-#include <mbedtls/base64.h>
-#include <sys/param.h>
+#include "mbedtls/base64.h"
+#include "mbedtls/version.h"
 
 #include "cmd.h"
 
@@ -56,7 +58,7 @@ extern SemaphoreHandle_t xSemaphoreSmtp;
 
 static const char *TAG = "SMTP";
 
-#define BUF_SIZE			512
+#define BUF_SIZE 512
 
 #define VALIDATE_MBEDTLS_RETURN(ret, min_valid_ret, max_valid_ret, goto_label)	\
 	do {																		\
@@ -310,9 +312,9 @@ static int smtp_client_init_mbedtls_conn(smtp_client_mbedtls_handle_t *client)
 	ESP_LOGD(TAG, "Setting up the SSL/TLS structure...");
 
 	if ((ret = mbedtls_ssl_config_defaults(&client->conf,
-										   MBEDTLS_SSL_IS_CLIENT,
-										   MBEDTLS_SSL_TRANSPORT_STREAM,
-										   MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
+			MBEDTLS_SSL_IS_CLIENT,
+			MBEDTLS_SSL_TRANSPORT_STREAM,
+			MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
 		ESP_LOGE(TAG, "mbedtls_ssl_config_defaults returned -0x%x", -ret);
 		goto exit;
 	}
@@ -357,8 +359,9 @@ void smtp_client_task(void *pvParameters)
 	ret = smtp_client_init_mbedtls_conn(client);
 	if (ret != 0) {
 		ESP_LOGE(TAG, "Error in initializing mbedTLS params, returned %02x", ret);
-		mbedtls_strerror(ret, buf, 100);
-		ESP_LOGE(TAG, "Last error was: -0x%x - %s", -ret, buf);
+		char error_buf[200];
+		mbedtls_strerror(ret, error_buf, 100);
+		ESP_LOGE(TAG, "Last error was: -0x%x - %s", -ret, error_buf);
 		vTaskDelete(NULL);
 	}
 
@@ -384,8 +387,7 @@ void smtp_client_task(void *pvParameters)
 
 		ESP_LOGI(TAG, "Connecting to %s:%s...", MAIL_SERVER, MAIL_PORT);
 
-		if ((ret = mbedtls_net_connect(&client->server_fd, MAIL_SERVER,
-								   MAIL_PORT, MBEDTLS_NET_PROTO_TCP)) != 0) {
+		if ((ret = mbedtls_net_connect(&client->server_fd, MAIL_SERVER, MAIL_PORT, MBEDTLS_NET_PROTO_TCP)) != 0) {
 			ESP_LOGE(TAG, "mbedtls_net_connect returned -0x%x", -ret);
 			goto exit;
 		}
@@ -446,7 +448,7 @@ void smtp_client_task(void *pvParameters)
 
 		ESP_LOGI(TAG, "Write USER NAME");
 		ret = mbedtls_base64_encode((unsigned char *) base64_buffer, sizeof(base64_buffer),
-								&base64_len, (unsigned char *) SENDER_MAIL, strlen(SENDER_MAIL));
+			&base64_len, (unsigned char *) SENDER_MAIL, strlen(SENDER_MAIL));
 		if (ret != 0) {
 			ESP_LOGE(TAG, "Error in mbedtls encode! ret = -0x%x", -ret);
 			goto exit;
@@ -457,7 +459,7 @@ void smtp_client_task(void *pvParameters)
 
 		ESP_LOGI(TAG, "Write PASSWORD");
 		ret = mbedtls_base64_encode((unsigned char *) base64_buffer, sizeof(base64_buffer),
-								&base64_len, (unsigned char *) SENDER_PASSWORD, strlen(SENDER_PASSWORD));
+			&base64_len, (unsigned char *) SENDER_PASSWORD, strlen(SENDER_PASSWORD));
 		if (ret != 0) {
 			ESP_LOGE(TAG, "Error in mbedtls encode! ret = -0x%x", -ret);
 			goto exit;
@@ -485,10 +487,10 @@ void smtp_client_task(void *pvParameters)
 		ESP_LOGI(TAG, "Write Content");
 		/* We do not take action if message sending is partly failed. */
 		len = snprintf((char *) buf, BUF_SIZE,
-				   "From: %s\r\nSubject: mbed TLS mail\r\n"
-				   "To: %s\r\n"
-				   "MIME-Version: 1.0 (mime-construct 1.9)\n",
-				   "ESP32 SMTP Client", RECIPIENT_MAIL);
+			"From: %s\r\nSubject: mbed TLS mail\r\n"
+			"To: %s\r\n"
+			"MIME-Version: 1.0 (mime-construct 1.9)\n",
+			"ESP32 SMTP Client", RECIPIENT_MAIL);
 
 		/**
 		 * Note: We are not validating return for some ssl_writes.
@@ -498,30 +500,32 @@ void smtp_client_task(void *pvParameters)
 
 		/* Multipart boundary */
 		len = snprintf((char *) buf, BUF_SIZE,
-				   "Content-Type: multipart/mixed;boundary=XYZabcd1234\n"
-				   "--XYZabcd1234\n");
+			"Content-Type: multipart/mixed;boundary=XYZabcd1234\n"
+			"--XYZabcd1234\n");
 		ret = write_ssl_data(&client->ssl, (unsigned char *) buf, len);
 
 		/* Text */
 		len = snprintf((char *) buf, BUF_SIZE,
-				   "Content-Type: text/plain\n"
-				   "This is a simple test mail from the SMTP client example.\r\n"
-				   "\r\n"
-				   "Enjoy!\n\n--XYZabcd1234\n");
+			"Content-Type: text/plain; charset=UTF-8; format=flowed\n"
+			"Content-Transfer-Encoding: 7bit\n"
+			"Your ESP-IDF is %s.\r\n"
+			"Your MBEDTLS is %s.\r\n"
+			"\n\n--XYZabcd1234\n",
+			esp_get_idf_version(), MBEDTLS_VERSION_STRING_FULL);
 		ret = write_ssl_data(&client->ssl, (unsigned char *) buf, len);
 
 		/* Attachment */
 #if 0
 		len = snprintf((char *) buf, BUF_SIZE,
-				   "Content-Type: image/png;name=esp_logo.png\n"
-				   "Content-Transfer-Encoding: base64\n"
-				   "Content-Disposition:attachment;filename=\"esp_logo.png\"\n\n");
+			"Content-Type: image/png;name=esp_logo.png\n"
+			"Content-Transfer-Encoding: base64\n"
+			"Content-Disposition:attachment;filename=\"esp_logo.png\"\n\n");
 #else
 		len = snprintf((char *) buf, BUF_SIZE,
-				   "Content-Type: image/jpeg;name=%s\n"
-				   "Content-Transfer-Encoding: base64\n"
-				   "Content-Disposition:attachment;filename=\"%s\"\n\n", 
-					smtpBuf.remoteFileName,	smtpBuf.remoteFileName);
+			"Content-Type: image/jpeg;name=%s\n"
+			"Content-Transfer-Encoding: base64\n"
+			"Content-Disposition:attachment;filename=\"%s\"\n\n", 
+			smtpBuf.remoteFileName,	smtpBuf.remoteFileName);
 #endif
 		ret = write_ssl_data(&client->ssl, (unsigned char *) buf, len);
 
@@ -540,7 +544,7 @@ void smtp_client_task(void *pvParameters)
 				int read_length = fread(read_buffer, 1, read_bytes, fp);
 				ESP_LOGD(TAG, "read_length=%d", read_length);
 				ret = mbedtls_base64_encode((unsigned char *) base64_buffer, sizeof(base64_buffer),
-									&base64_len, read_buffer, read_length);
+					&base64_len, read_buffer, read_length);
 				if (ret != 0) {
 					ESP_LOGE(TAG, "Error in mbedtls encode! ret = -0x%x", -ret);
 					goto exit;
