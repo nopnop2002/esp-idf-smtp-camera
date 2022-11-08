@@ -462,16 +462,16 @@ void app_main(void)
 
 #if CONFIG_REMOTE_IS_FIXED_NAME
 #if CONFIG_REMOTE_FRAMESIZE
-    char baseFileName[64];
-    strcpy(baseFileName, CONFIG_FIXED_REMOTE_FILE);
-    for (int index=0;index<strlen(baseFileName);index++) {
-        if (baseFileName[index] == 0x2E) baseFileName[index] = 0;
-    }
-    ESP_LOGI(TAG, "baseFileName=[%s]", baseFileName);
-    // picture_640x480.jpg
-    sprintf(smtpBuf.remoteFileName, "%s_%s.jpg", baseFileName, FRAMESIZE_STRING);
+	char baseFileName[64];
+	strcpy(baseFileName, CONFIG_FIXED_REMOTE_FILE);
+	for (int index=0;index<strlen(baseFileName);index++) {
+		if (baseFileName[index] == 0x2E) baseFileName[index] = 0;
+	}
+	ESP_LOGI(TAG, "baseFileName=[%s]", baseFileName);
+	// picture_640x480.jpg
+	sprintf(smtpBuf.remoteFileName, "%s_%s.jpg", baseFileName, FRAMESIZE_STRING);
 #else
-    // picture.jpg
+	// picture.jpg
 	sprintf(smtpBuf.remoteFileName, "%s", CONFIG_FIXED_REMOTE_FILE);
 #endif
 	ESP_LOGI(TAG, "remoteFileName=%s",smtpBuf.remoteFileName);
