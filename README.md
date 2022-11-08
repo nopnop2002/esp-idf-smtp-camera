@@ -95,14 +95,14 @@ You can select the file name to write to the shared folder from the following.
 When you choose date and time file name, you will need an NTP server.   
 The file name will be YYYYMMDD-hhmmss.jpg.   
 
-![config-filename-1](https://user-images.githubusercontent.com/6020549/119243498-5203aa00-bba2-11eb-87d5-053636dbb85a.jpg)
-![config-filename-2](https://user-images.githubusercontent.com/6020549/119243499-5203aa00-bba2-11eb-8c0f-6bb42d125d64.jpg)
+![config-filename-1](https://user-images.githubusercontent.com/6020549/200576375-b0b56def-3a56-4635-90d1-f13dacbec858.jpg)
+![config-filename-2](https://user-images.githubusercontent.com/6020549/200576396-b82ce9b0-e21f-4b52-9339-ce97044d52a5.jpg)
 
 - Add FrameSize to Remote file Name   
 When this is enabled, FrameSize is added to remote file name like this.   
 `20210520-165740_800x600.jpg`   
 
-![config-filename-3](https://user-images.githubusercontent.com/6020549/119243501-529c4080-bba2-11eb-8ba4-85cdd764b0fc.jpg)
+![config-filename-3](https://user-images.githubusercontent.com/6020549/200576466-02a70de9-d3ed-4609-93c6-e0dbcac3c29b.jpg)
 
 
 ## Select Board
