@@ -119,18 +119,18 @@ Large frame sizes take longer to take a picture.
 
 You can choose one of the following shutter methods
 
-- Shutter is the Enter key on the keyboard   
+### Shutter is the Enter key on the keyboard   
 For operation check
 
 ![config-shutter-1](https://user-images.githubusercontent.com/6020549/100706728-d132d500-33ec-11eb-96e2-22d30b2131f5.jpg)
 
-- Shutter is a GPIO toggle
+### Shutter is a GPIO toggle
 
-  - Initial Sate is PULLDOWN   
-The shutter is prepared when it is turned from OFF to ON, and a picture is taken when it is turned from ON to OFF.   
+- Initial Sate is PULLDOWN   
+ The shutter is prepared when it is turned from OFF to ON, and a picture is taken when it is turned from ON to OFF.   
 
-  - Initial Sate is PULLUP   
-The shutter is prepared when it is turned from ON to OFF, and a picture is taken when it is turned from OFF to ON.   
+- Initial Sate is PULLUP   
+ The shutter is prepared when it is turned from ON to OFF, and a picture is taken when it is turned from OFF to ON.   
 
 I confirmed that the following GPIO can be used.   
 
@@ -144,20 +144,20 @@ I confirmed that the following GPIO can be used.
 
 ![config-shutter-2](https://user-images.githubusercontent.com/6020549/100706729-d2640200-33ec-11eb-8ac5-68abad4d1a0b.jpg)
 
-- Shutter is TCP Socket   
+### Shutter is TCP Socket   
 You can use tcp_send.py as shutter.   
 `python3 ./tcp_send.py`
 
 ![config-shutter-3](https://user-images.githubusercontent.com/6020549/100706730-d2fc9880-33ec-11eb-80da-80cc8278ae43.jpg)
 
-- Shutter is UDP Socket   
+### Shutter is UDP Socket   
 You can use udp_send.py as shutter.   
 Requires netifaces.   
 `python3 ./udp_send.py`
 
 ![config-shutter-4](https://user-images.githubusercontent.com/6020549/100706733-d2fc9880-33ec-11eb-85d2-62b988720d75.jpg)
 
-- Shutter is a MQTT Publish
+### Shutter is a MQTT Publish
 You can use mosquitto_pub as shutter.   
 `mosquitto_pub -h broker.emqx.io -t "/take/picture" -m "hello world"`   
 
