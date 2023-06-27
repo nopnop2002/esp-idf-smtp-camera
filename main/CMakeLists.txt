@@ -3,7 +3,8 @@ set(srcs "main.c"
 	"gpio.c"
 	"smtp_client.c"
 	"tcp_server.c"
-	"udp_server.c")
+	"udp_server.c" 
+	"mqtt_sub.c")
 
 idf_component_register(SRCS ${srcs}
     INCLUDE_DIRS "."

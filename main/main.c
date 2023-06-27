@@ -128,8 +128,7 @@ static esp_err_t camera_capture(char * FileName, size_t *pictureSize)
 	return ESP_OK;
 }
 
-static void event_handler(void* arg, esp_event_base_t event_base,
-								int32_t event_id, void* event_data)
+static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data)
 {
 	if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
 		esp_wifi_connect();
@@ -346,6 +345,10 @@ void tcp_server(void *pvParameters);
 void udp_server(void *pvParameters);
 #endif
 
+#if CONFIG_SHUTTER_MQTT
+void mqtt_client(void *pvParameters);
+#endif
+
 void smtp_client_task(void *pvParameters);
 
 void app_main(void)
@@ -429,6 +432,11 @@ void app_main(void)
 #if CONFIG_SHUTTER_UDP
 #define SHUTTER "UDP Input"
 	xTaskCreate(udp_server, "UDP", 1024*4, NULL, 2, NULL);
+#endif
+
+#if CONFIG_SHUTTER_MQTT
+#define SHUTTER "MQTT Publish"
+	xTaskCreate(mqtt_client, "MQTT", 1024*4, NULL, 2, NULL);
 #endif
 
 #if CONFIG_FRAMESIZE_VGA

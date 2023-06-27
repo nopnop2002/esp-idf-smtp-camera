@@ -186,12 +186,14 @@ menu "Application Configuration"
 				bool "Use TCP Socket"
 			config SHUTTER_UDP
 				bool "Use UDP Socket"
+			config SHUTTER_MQTT
+				bool "Use MQTT Subscribe"
 
 		endchoice
 
 		config GPIO_INPUT
-			int "Input GPIO number"
 			depends on SHUTTER_GPIO
+			int "Input GPIO number"
 			range 4 34
 			default 15
 			help
@@ -199,8 +201,8 @@ menu "Application Configuration"
 				Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used to Button.
 
 		choice GPIO_INITIAL
-			prompt "GPIO Initial state"
 			depends on SHUTTER_GPIO
+			prompt "GPIO Initial state"
 			default GPIO_PULLDOWN
 			help
 				Select initial state of GPIO.
@@ -218,20 +220,58 @@ menu "Application Configuration"
 		endchoice
 
 		config TCP_PORT
-			int "TCP Port"
 			depends on SHUTTER_TCP
+			int "TCP Port"
 			range 0 65535
 			default 9876
 			help
 				Local port TCP server will listen on.
 
 		config UDP_PORT
-			int "UDP Port"
 			depends on SHUTTER_UDP
+			int "UDP Port"
 			range 0 65535
 			default 9876
 			help
 				Local port UDP server will listen on.
+
+		config MQTT_BROKER
+			depends on SHUTTER_MQTT
+			string "MQTT Broker"
+			default "broker.emqx.io"
+			help
+				Host name or IP address of the broker to connect to.
+
+		config MQTT_SUB_TOPIC
+			depends on SHUTTER_MQTT
+			string "Subscribe Topic"
+			default "/take/picture"
+			help
+				Topic of subscribe.
+
+		config BROKER_AUTHENTICATION
+			depends on SHUTTER_MQTT
+			bool "Server requests for password when connecting"
+			default false
+			help
+				Server requests for password when connecting.
+
+		config AUTHENTICATION_USERNAME
+			depends on SHUTTER_MQTT
+			depends on BROKER_AUTHENTICATION
+			string "Username used for connecting to the broker"
+			default "user"
+			help
+				Username used for connecting to the broker.
+
+		config AUTHENTICATION_PASSWORD
+			depends on SHUTTER_MQTT
+			depends on BROKER_AUTHENTICATION
+			string "Password used for connecting to the broker"
+			default "password"
+			help
+				Username used for connecting to the broker.
+
 	endmenu
 
 	config ENABLE_FLASH
