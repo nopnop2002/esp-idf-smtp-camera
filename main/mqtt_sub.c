@@ -161,7 +161,7 @@ void mqtt_client(void *pvParameters)
 	sprintf(uri, "mqtt://%s", ip);
 	ESP_LOGI(TAG, "uri=[%s]", uri);
 
-	// Initialize user context
+	// Initialize MQTT Connection
 	MQTT_t mqttBuf;
 	mqttBuf.taskHandle = xTaskGetCurrentTaskHandle();
 	ESP_LOGI(TAG, "taskHandle=0x%x", (unsigned int)mqttBuf.taskHandle);

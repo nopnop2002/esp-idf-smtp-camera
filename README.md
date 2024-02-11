@@ -1,6 +1,6 @@
 # esp-idf-smtp-camera
 Take a picture and Publish it via SMTP.   
-This project use [ESP32 Camera Driver](https://github.com/espressif/esp32-camera).   
+This project use [ESP32 Camera Driver](https://components.espressif.com/components/espressif/esp32-camera).   
 
 ![slide0001](https://user-images.githubusercontent.com/6020549/122657146-caf32300-d19b-11eb-95c0-d053b77599c7.jpg)
 ![slide0002](https://user-images.githubusercontent.com/6020549/122657145-c9c1f600-d19b-11eb-9049-17dc2d71acdc.jpg)
@@ -8,7 +8,12 @@ This project use [ESP32 Camera Driver](https://github.com/espressif/esp32-camera
 # Hardware requirements
 ESP32 development board with OV2640 camera.   
 If you use other camera, edit sdkconfig.default.   
-![ESP32-Camera-board](https://user-images.githubusercontent.com/6020549/198520670-27ea9bd1-71d8-438f-be58-8516154be4af.JPG)
+From the left:   
+- Aithinker ESP32-CAM   
+- Freenove ESP32-WROVER CAM   
+- UICPAL ESPS3 CAM   
+
+![UICPAL-ESP32-S3-3](https://github.com/nopnop2002/esp-idf-smtp-camera/assets/6020549/3264eb5b-c39a-43eb-8bce-8aad816eecaa)
 
 # Software requirements
 esp-idf v4.4/v5.0.   
@@ -28,7 +33,6 @@ For AiThinker ESP32-CAM, You have to use a USB-TTL converter.
 ```
 git clone https://github.com/nopnop2002/esp-idf-smtp-camera
 cd esp-idf-smtp-camera
-git clone https://github.com/espressif/esp32-camera components/esp32-camera
 chmod 777 getpem.sh
 ./getpem.sh
 idf.py set-target esp32
@@ -106,7 +110,7 @@ When this is enabled, FrameSize is added to remote file name like this.
 
 
 ## Select Board
-![config-board](https://user-images.githubusercontent.com/6020549/200573971-d38ac9a2-9d3f-4e14-ba45-a187cecb5729.jpg)
+![config-board](https://github.com/nopnop2002/esp-idf-smtp-camera/assets/6020549/3b16559b-e8a0-43c7-914f-679cccee3339)
 
 
 ## Select Frame Size
