@@ -35,7 +35,7 @@ git clone https://github.com/nopnop2002/esp-idf-smtp-camera
 cd esp-idf-smtp-camera
 chmod 777 getpem.sh
 ./getpem.sh
-idf.py set-target esp32
+idf.py set-target {esp32/esp32s3}
 idf.py menuconfig
 idf.py flash monitor
 ```
