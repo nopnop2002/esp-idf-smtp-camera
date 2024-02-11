@@ -165,7 +165,7 @@ Requires netifaces.
 You can use mosquitto_pub as shutter.   
 `mosquitto_pub -h broker.emqx.io -t "/take/picture" -m "hello world"`   
 
-MQTT broker is specified by one of the following.
+  MQTT broker is specified by one of the following.
   - IP address   
 ```192.168.10.20```   
   - mDNS host name   
