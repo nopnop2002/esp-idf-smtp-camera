@@ -12,8 +12,9 @@ From the left:
 - Aithinker ESP32-CAM   
 - Freenove ESP32-WROVER CAM   
 - UICPAL ESPS3 CAM   
+- Freenove ESP32S3-WROVER CAM (Clone)   
 
-![UICPAL-ESP32-S3-3](https://github.com/nopnop2002/esp-idf-smtp-camera/assets/6020549/3264eb5b-c39a-43eb-8bce-8aad816eecaa)
+![es32-camera](https://github.com/nopnop2002/esp-idf-websocket-camera/assets/6020549/38dbef9a-ed85-4df2-8d22-499b2b497278)
 
 # Software requirements
 esp-idf v4.4/v5.0.   
@@ -180,9 +181,13 @@ Specifies the username and password if the server requires a password when conne
 ![config-shutter-52](https://github.com/nopnop2002/esp-idf-mqtt-camera/assets/6020549/c3cca004-1c19-4d5b-8623-06327ff17ee7)
 
 
-## Flash Light
-
+## Flash Light   
 ESP32-CAM by AI-Thinker have flash light on GPIO4.   
 
 ![config-flash](https://user-images.githubusercontent.com/6020549/122479750-8f732000-d006-11eb-9e50-16c91cff1bb3.jpg)
+
+## PSRAM   
+When you use ESP32S3-WROVER CAM, you need to set the PSRAM type.   
+
+![config-psram](https://github.com/nopnop2002/esp-idf-websocket-camera/assets/6020549/ba04f088-c628-46ac-bc5b-2968032753e0)
 
