@@ -1,6 +1,6 @@
 # esp-idf-smtp-camera
 Take a picture and Publish it via SMTP.   
-This project use [ESP32 Camera Driver](https://components.espressif.com/components/espressif/esp32-camera).   
+This project use [this](https://components.espressif.com/components/espressif/esp32-camera) Camera Driver.   
 
 ![slide0001](https://user-images.githubusercontent.com/6020549/122657146-caf32300-d19b-11eb-95c0-d053b77599c7.jpg)
 ![slide0002](https://user-images.githubusercontent.com/6020549/122657145-c9c1f600-d19b-11eb-9049-17dc2d71acdc.jpg)
@@ -80,18 +80,17 @@ Use this code as your password.
 
 You can select the file name to write to the shared folder from the following.   
 - Always the same file name   
-- File name based on date and time   
-When you choose date and time file name, you will need an NTP server.   
-The file name will be YYYYMMDD-hhmmss.jpg.   
+	![config-filename-1](https://user-images.githubusercontent.com/6020549/200576375-b0b56def-3a56-4635-90d1-f13dacbec858.jpg)
 
-![config-filename-1](https://user-images.githubusercontent.com/6020549/200576375-b0b56def-3a56-4635-90d1-f13dacbec858.jpg)
-![config-filename-2](https://user-images.githubusercontent.com/6020549/200576396-b82ce9b0-e21f-4b52-9339-ce97044d52a5.jpg)
+- File name based on date and time   
+	When you choose date and time file name, you will need an NTP server.   
+	The file name will be YYYYMMDD-hhmmss.jpg.   
+	![config-filename-2](https://user-images.githubusercontent.com/6020549/200576396-b82ce9b0-e21f-4b52-9339-ce97044d52a5.jpg)
 
 - Add FrameSize to Remote file Name   
-When this is enabled, FrameSize is added to remote file name like this.   
-`20210520-165740_800x600.jpg`   
-
-![config-filename-3](https://user-images.githubusercontent.com/6020549/200576466-02a70de9-d3ed-4609-93c6-e0dbcac3c29b.jpg)
+	When this is enabled, FrameSize is added to remote file name like this.   
+	`20210520-165740_800x600.jpg`   
+	![config-filename-3](https://user-images.githubusercontent.com/6020549/200576466-02a70de9-d3ed-4609-93c6-e0dbcac3c29b.jpg)
 
 
 ## Select Board
@@ -109,60 +108,57 @@ Large frame sizes take longer to take a picture.
 You can choose one of the following shutter methods
 
 - Shutter is the Enter key on the keyboard   
-For operation check
-
-![config-shutter-1](https://user-images.githubusercontent.com/6020549/100706728-d132d500-33ec-11eb-96e2-22d30b2131f5.jpg)
+	For operation check
+	![config-shutter-1](https://user-images.githubusercontent.com/6020549/100706728-d132d500-33ec-11eb-96e2-22d30b2131f5.jpg)
 
 - Shutter is a GPIO toggle
 
-  - Initial Sate is PULLDOWN   
-The shutter is prepared when it is turned from OFF to ON, and a picture is taken when it is turned from ON to OFF.   
+	- Initial Sate is PULLDOWN   
+		The shutter is prepared when it is turned from OFF to ON, and a picture is taken when it is turned from ON to OFF.   
 
-  - Initial Sate is PULLUP   
-The shutter is prepared when it is turned from ON to OFF, and a picture is taken when it is turned from OFF to ON.   
+	- Initial Sate is PULLUP   
+		The shutter is prepared when it is turned from ON to OFF, and a picture is taken when it is turned from OFF to ON.   
 
-I confirmed that the following GPIO can be used.   
+	I confirmed that the following GPIO can be used.   
 
-|GPIO|PullDown|PullUp|
-|:-:|:-:|:-:|
-|GPIO12|OK|NG|
-|GPIO13|OK|OK|
-|GPIO14|OK|OK|
-|GPIO15|OK|OK|
-|GPIO16|NG|NG|
+	|GPIO|PullDown|PullUp|
+	|:-:|:-:|:-:|
+	|GPIO12|OK|NG|
+	|GPIO13|OK|OK|
+	|GPIO14|OK|OK|
+	|GPIO15|OK|OK|
+	|GPIO16|NG|NG|
 
-![config-shutter-2](https://user-images.githubusercontent.com/6020549/100706729-d2640200-33ec-11eb-8ac5-68abad4d1a0b.jpg)
+	![config-shutter-2](https://user-images.githubusercontent.com/6020549/100706729-d2640200-33ec-11eb-8ac5-68abad4d1a0b.jpg)
 
 - Shutter is TCP Socket   
-You can use tcp_send.py as shutter.   
-`python3 ./tcp_send.py`
-
-![config-shutter-3](https://user-images.githubusercontent.com/6020549/100706730-d2fc9880-33ec-11eb-80da-80cc8278ae43.jpg)
+	You can use tcp_send.py as shutter.   
+	`python3 ./tcp_send.py`
+	![config-shutter-3](https://user-images.githubusercontent.com/6020549/100706730-d2fc9880-33ec-11eb-80da-80cc8278ae43.jpg)
 
 - Shutter is UDP Socket   
-You can use udp_send.py as shutter.   
-Requires netifaces.   
-`python3 ./udp_send.py`
-
-![config-shutter-4](https://user-images.githubusercontent.com/6020549/100706733-d2fc9880-33ec-11eb-85d2-62b988720d75.jpg)
+	You can use udp_send.py as shutter.   
+	Requires netifaces.   
+	`python3 ./udp_send.py`
+	![config-shutter-4](https://user-images.githubusercontent.com/6020549/100706733-d2fc9880-33ec-11eb-85d2-62b988720d75.jpg)
 
 - Shutter is a MQTT Publish
-You can use mosquitto_pub as shutter.   
-`mosquitto_pub -h broker.emqx.io -t "/take/picture" -m "hello world"`   
+	You can use mosquitto_pub as shutter.   
+	`mosquitto_pub -h broker.emqx.io -t "/take/picture" -m "hello world"`   
 
-  MQTT broker is specified by one of the following.
-  - IP address   
-```192.168.10.20```   
-  - mDNS host name   
-```mqtt-broker.local```   
-  - Fully Qualified Domain Name   
-```broker.emqx.io```
+	MQTT broker is specified by one of the following.
+	- IP address   
+	```192.168.10.20```   
+	- mDNS host name   
+	```mqtt-broker.local```   
+	- Fully Qualified Domain Name   
+	```broker.emqx.io```
 
-![config-shutter-51](https://github.com/nopnop2002/esp-idf-mqtt-camera/assets/6020549/7173762e-dfd4-4f19-a7ce-63a85c69edb4)
+	![config-shutter-51](https://github.com/nopnop2002/esp-idf-mqtt-camera/assets/6020549/7173762e-dfd4-4f19-a7ce-63a85c69edb4)
 
-Specifies the username and password if the server requires a password when connecting.   
+	Specifies the username and password if the server requires a password when connecting.   
 
-![config-shutter-52](https://github.com/nopnop2002/esp-idf-mqtt-camera/assets/6020549/c3cca004-1c19-4d5b-8623-06327ff17ee7)
+	![config-shutter-52](https://github.com/nopnop2002/esp-idf-mqtt-camera/assets/6020549/c3cca004-1c19-4d5b-8623-06327ff17ee7)
 
 
 ## Flash Light   
