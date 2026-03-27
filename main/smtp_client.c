@@ -29,14 +29,14 @@
 #include "esp_system.h"
 #include "esp_log.h"
 
-//#include <sys/param.h>
-
 #include "mbedtls/platform.h"
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/esp_debug.h"
 #include "mbedtls/ssl.h"
+#if ESP_IDF_VERSION_MAJOR == 5
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
+#endif
 #include "mbedtls/error.h"
 //#include "mbedtls/certs.h"
 #include "mbedtls/base64.h"
@@ -254,8 +254,10 @@ exit:
 }
 
 typedef struct smtp_client_handle {
+#if ESP_IDF_VERSION_MAJOR == 5
 	mbedtls_entropy_context entropy;
 	mbedtls_ctr_drbg_context ctr_drbg;
+#endif
 	mbedtls_ssl_context ssl;
 	mbedtls_x509_crt cacert;
 	mbedtls_ssl_config conf;
@@ -269,9 +271,13 @@ static void smtp_client_delete_mbedtls_conn(smtp_client_mbedtls_handle_t *client
 	}
 	mbedtls_net_free(&client->server_fd);
 	mbedtls_x509_crt_free(&client->cacert);
+#if ESP_IDF_VERSION_MAJOR == 5
 	mbedtls_entropy_free(&client->entropy);
+#endif
 	mbedtls_ssl_config_free(&client->conf);
+#if ESP_IDF_VERSION_MAJOR == 5
 	mbedtls_ctr_drbg_free(&client->ctr_drbg);
+#endif
 	mbedtls_ssl_free(&client->ssl);
 }
 
@@ -281,17 +287,21 @@ static int smtp_client_init_mbedtls_conn(smtp_client_mbedtls_handle_t *client)
 	int ret;
 	mbedtls_ssl_init(&client->ssl);
 	mbedtls_x509_crt_init(&client->cacert);
+#if ESP_IDF_VERSION_MAJOR == 5
 	mbedtls_ctr_drbg_init(&client->ctr_drbg);
 	ESP_LOGD(TAG, "Seeding the random number generator");
+#endif
 
 	mbedtls_ssl_config_init(&client->conf);
 
+#if ESP_IDF_VERSION_MAJOR == 5
 	mbedtls_entropy_init(&client->entropy);
 	if ((ret = mbedtls_ctr_drbg_seed(&client->ctr_drbg, mbedtls_entropy_func, &client->entropy,
 									 NULL, 0)) != 0) {
 		ESP_LOGE(TAG, "mbedtls_ctr_drbg_seed returned -0x%x", -ret);
 		goto exit;
 	}
+#endif
 
 	ESP_LOGD(TAG, "Loading the CA root certificate...");
 
@@ -323,7 +333,9 @@ static int smtp_client_init_mbedtls_conn(smtp_client_mbedtls_handle_t *client)
 
 	mbedtls_ssl_conf_authmode(&client->conf, MBEDTLS_SSL_VERIFY_REQUIRED);
 	mbedtls_ssl_conf_ca_chain(&client->conf, &client->cacert, NULL);
+#if ESP_IDF_VERSION_MAJOR == 5
 	mbedtls_ssl_conf_rng(&client->conf, mbedtls_ctr_drbg_random, &client->ctr_drbg);
+#endif
 #ifdef CONFIG_MBEDTLS_DEBUG
 	mbedtls_esp_enable_debug_log(&conf, 4);
 #endif
@@ -350,6 +362,8 @@ void smtp_client_task(void *pvParameters)
 	unsigned char base64_buffer[128];
 	int ret, len;
 	size_t base64_len;
+
+	ESP_LOGI(TAG, "ESP_IDF_VERSION_MAJOR=%d", ESP_IDF_VERSION_MAJOR);
 
 	smtp_client_mbedtls_handle_t *client = NULL;
 	client = (smtp_client_mbedtls_handle_t*)calloc(1,sizeof(smtp_client_mbedtls_handle_t));
